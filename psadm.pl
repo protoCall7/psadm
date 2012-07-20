@@ -1,21 +1,21 @@
 #!/usr/bin/perl 
 #===============================================================================
 #
-#     FILE: psadm.pl
+#         FILE: psadm.pl
 #
-#     USAGE: ./psadm.pl
+#        USAGE: ./psadm.pl
 #
-#     DESCRIPTION: Administration tool for Ubuntu Preseed Configuration
+#  DESCRIPTION: Administration tool for Ubuntu Preseed Configuration
 #
-#     OPTIONS: ---
-# 	  REQUIREMENTS: autodie, Term::Menus, IO::Uncompress::Gunzip, File::Copy,
+#      OPTIONS: ---
+# REQUIREMENTS: autodie, Term::Menus, IO::Uncompress::Gunzip, File::Copy,
 # 				File::Unpack
-#     BUGS: ---
-#     NOTES: ---
-#     AUTHOR: Peter H. Ezetta (PE), peter.ezetta@zonarsystems.com
-#     COMPANY: Zonar Systems, Inc
-#     VERSION: 1.0
-#     CREATED: 07/19/2012 04:18:30 PM
+#         BUGS: ---
+#        NOTES: ---
+#       AUTHOR: Peter H. Ezetta (PE), peter.ezetta@zonarsystems.com
+#      COMPANY: Zonar Systems, Inc
+#      VERSION: 1.0
+#      CREATED: 07/19/2012 04:18:30 PM
 #     REVISION: ---
 #===============================================================================
 

@@ -1,14 +1,14 @@
 #!/usr/bin/perl 
 #===============================================================================
 #
-#         FILE: psadm.pl
+#     FILE: psadm.pl
 #
-#        USAGE: ./psadm.pl
+#     USAGE: ./psadm.pl
 #
-#  DESCRIPTION: Administration tool for Ubuntu Preseed Configuration
+#     DESCRIPTION: Administration tool for Ubuntu Preseed Configuration
 #
-#      OPTIONS: ---
-# REQUIREMENTS: autodie, Term::Menus, IO::Uncompress::Gunzip, File::Copy,
+#     OPTIONS: ---
+# 	  REQUIREMENTS: autodie, Term::Menus, IO::Uncompress::Gunzip, File::Copy,
 # 				File::Unpack
 #     BUGS: ---
 #     NOTES: ---
@@ -39,6 +39,16 @@ my $image      = "initrd.gz";
 my $newc       = "image.cpio";
 my $selection;
 
+#===  FUNCTION  ================================================================
+#         NAME: unpack
+#      PURPOSE: Unpack initrd.gz image into working directory
+#   PARAMETERS: None 
+#      RETURNS: None 
+#  DESCRIPTION: This function uncompresses, and unpacks an initrd.gz image.
+#       THROWS: no exceptions
+#     COMMENTS: none
+#     SEE ALSO: repack 
+#===============================================================================
 sub unpack {
     my $uh = File::Unpack->new;
 
@@ -60,6 +70,17 @@ sub unpack {
     print "Image Uncompressed to $unpackdir\n";
 }
 
+#===  FUNCTION  ================================================================
+#         NAME: repack
+#      PURPOSE: Repack working directory into initrd.gz image.
+#   PARAMETERS: None
+#      RETURNS: None
+#  DESCRIPTION: This function packs the working directory into a newc formatted
+#  				cpio archive, then compresses it with gzip into an initrd image
+#       THROWS: no exceptions
+#     COMMENTS: none
+#     SEE ALSO: unpack 
+#===============================================================================
 sub repack {
 
     #chdir $installdir;

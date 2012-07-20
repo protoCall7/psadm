@@ -3,7 +3,7 @@ psadm
 
 Administration Application to Manage Ubuntu Preseed
 
-LICENSE
+License
 =======
 Copyright (c) 2012, Peter Ezetta 
 All rights reserved.

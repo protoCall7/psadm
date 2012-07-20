@@ -31,23 +31,24 @@ use File::Unpack;
 use File::Path;
 use diagnostics;
 
-my @list       = ( 'Unpack', 'Repack' );
+my @list       = ( 'Unpack', 'Interface', 'Repack' );
 my $banner     = "Please select an operation:";
 my $unpackdir  = "./image";
 my $installdir = "/var/lib/tftpboot/ubuntu-installer/amd64";
 my $image      = "initrd.gz";
 my $newc       = "image.cpio";
+my $preseed    = "preseed.cfg";
 my $selection;
 
 #===  FUNCTION  ================================================================
 #         NAME: unpack
 #      PURPOSE: Unpack initrd.gz image into working directory
-#   PARAMETERS: None 
-#      RETURNS: None 
+#   PARAMETERS: None
+#      RETURNS: None
 #  DESCRIPTION: This function uncompresses, and unpacks an initrd.gz image.
 #       THROWS: no exceptions
-#     COMMENTS: none
-#     SEE ALSO: repack 
+#     COMMENTS: Uncomment chdir $installdir; before release!
+#     SEE ALSO: repack
 #===============================================================================
 sub unpack {
     my $uh = File::Unpack->new;
@@ -78,8 +79,8 @@ sub unpack {
 #  DESCRIPTION: This function packs the working directory into a newc formatted
 #  				cpio archive, then compresses it with gzip into an initrd image
 #       THROWS: no exceptions
-#     COMMENTS: none
-#     SEE ALSO: unpack 
+#     COMMENTS: Uncomment chdir $installdir; before release!
+#     SEE ALSO: unpack
 #===============================================================================
 sub repack {
 
@@ -98,14 +99,52 @@ sub repack {
     rmtree($unpackdir);
 }
 
-$selection = &pick( \@list, $banner );
-print $selection;
+#===  FUNCTION  ================================================================
+#         NAME: setNetIface
+#      PURPOSE: Configures the default network interface in preseed.cfg
+#   PARAMETERS: Network Interface Name
+#      RETURNS: None
+#  DESCRIPTION: Searches the preseed.cfg file for the default network interface
+#  				and sets it according to user input.
+#       THROWS: no exceptions
+#     COMMENTS: Uncomment chdir $installdir; before release!
+#     SEE ALSO: n/a
+#===============================================================================
+sub setNetIface {
 
-given ($selection) {
+    my $interface = shift;
+    local $^I   = '.bk';
+    local @ARGV = ("$preseed");
+
+	#chdir $installdir;
+    chdir $unpackdir;
+    unless ( -e $preseed ) {
+        print "FATAL:  $preseed Not Found!";
+        exit(1);
+    }
+
+    while (<>) {
+        s/choose_interface select eth\d{1}/choose_interface select $interface/;
+        print;
+    }
+}
+
+#-------------------------------------------------------------------------------
+#  Generate menu and call appropriate subroutine.
+#-------------------------------------------------------------------------------
+$selection = &pick( \@list, $banner );
+
+for ($selection) {
     when (/Unpack/) {
         &unpack;
     }
     when (/Repack/) {
         &repack;
+    }
+    when (/Interface/) {
+        print "Please enter a network interface: ";
+        my $interface = <STDIN>;
+        chomp $interface;
+        &setNetIface($interface);
     }
 }

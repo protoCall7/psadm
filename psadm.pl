@@ -31,75 +31,16 @@ use File::Unpack;
 use File::Path;
 use File::Fetch;
 use diagnostics;
+require "Initrd.pm";
 
 my @list       = ( 'Fetch', 'Unpack', 'Interface', 'Repack' );
 my $banner     = "Please select an operation:";
 my $unpackdir  = "./image";
 my $installdir = "/var/tftpboot/netboot/ubuntu-installer/amd64";
 my $image      = "initrd.gz";
-my $newc       = "image.cpio";
 my $preseed    = "preseed.cfg";
 my $tftpdir    = "/var/tftpboot";
 my $selection;
-
-#===  FUNCTION  ================================================================
-#         NAME: unpack
-#      PURPOSE: Unpack initrd.gz image into working directory
-#   PARAMETERS: None
-#      RETURNS: None
-#  DESCRIPTION: This function uncompresses, and unpacks an initrd.gz image.
-#       THROWS: no exceptions
-#     COMMENTS:
-#     SEE ALSO: repack
-#===============================================================================
-sub unpack {
-    my $uh = File::Unpack->new;
-
-    chdir $installdir;
-
-    die("FATAL:  initrd.gz Not Found!") unless -e $image;
-
-    unless ( -e $unpackdir ) {
-        print "Creating image directory: $unpackdir...\n";
-        mkdir $unpackdir;
-    }
-
-    print "Uncompressing $image...\n";
-    gunzip $image => $newc;
-    $uh->unpack( $newc, $unpackdir );
-
-    unlink($newc);
-    unlink($image);
-    print "Image Uncompressed to $unpackdir\n";
-}    ## --- end sub unpack
-
-#===  FUNCTION  ================================================================
-#         NAME: repack
-#      PURPOSE: Repack working directory into initrd.gz image.
-#   PARAMETERS: None
-#      RETURNS: None
-#  DESCRIPTION: This function packs the working directory into a newc formatted
-#  				cpio archive, then compresses it with gzip into an initrd image
-#       THROWS: no exceptions
-#     COMMENTS:
-#     SEE ALSO: unpack
-#===============================================================================
-sub repack {
-
-    chdir $installdir;
-
-    unless ( -e $unpackdir ) {
-        print "No Image to Repack!\n";
-        exit(1);
-    }
-    print "Creating cpio Archive...\n";
-    system("find $unpackdir | cpio --create --format='newc' > $newc");
-    print "Compressing cpio Archive...\n";
-    gzip $newc => $image;
-
-    unlink($newc);
-    rmtree($unpackdir);
-}    ## --- end sub repack
 
 #===  FUNCTION  ================================================================
 #         NAME: setNetIface
@@ -156,7 +97,8 @@ sub fetchNetboot {
 	chdir $tftpdir;
 	my $u = File::Unpack->new;
 	$u->unpack('netboot.tar.gz', $tftpdir);
-	print "Netboot Image Installed.  Please Unpack Image, Install preseed.cfg to $installdir/image\nand Repack Image.\n";
+	print "Netboot Image Installed.  Please Unpack Image, Install preseed.cfg to 
+	  $installdir/image\nand Repack Image.\n";
 }    ## --- end sub fetchNetboot
 
 #-------------------------------------------------------------------------------
@@ -166,10 +108,10 @@ $selection = &pick( \@list, $banner );
 
 for ($selection) {
     when (/Unpack/) {
-        &unpack;
+        &Initrd::unpack;
     }
     when (/Repack/) {
-        &repack;
+        &Initrd::repack;
     }
     when (/Interface/) {
         print "Please enter a network interface: ";

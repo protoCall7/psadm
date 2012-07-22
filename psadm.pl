@@ -14,7 +14,7 @@
 #        NOTES: ---
 #       AUTHOR: Peter H. Ezetta (PE), peter.ezetta@zonarsystems.com
 #      COMPANY: Zonar Systems, Inc
-#      VERSION: 1.0
+#      VERSION: 1.1
 #      CREATED: 07/19/2012 04:18:30 PM
 #     REVISION: ---
 #===============================================================================
@@ -24,10 +24,7 @@ use warnings;
 use 5.010;
 use autodie;
 use Term::Menus;
-use IO::Uncompress::Gunzip qw( gunzip $GunzipError );
-use IO::Compress::Gzip qw( gzip $GzipError );
 use File::Copy;
-use File::Unpack;
 use File::Path;
 use File::Fetch;
 use diagnostics;
@@ -54,7 +51,6 @@ my $selection;
 #     SEE ALSO: n/a
 #===============================================================================
 sub setNetIface {
-
     my $interface = shift;
     local $^I   = '.bk';
     local @ARGV = ("$preseed");
@@ -90,6 +86,22 @@ sub fetchNetboot {
 'http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/netboot.tar.gz'
       );
 
+	unless (-e $tftpdir) {
+		print "$tftpdir does not exist.  Create it? [y/n]: ";
+		my $response = <STDIN>;
+		chomp $reponse;
+		for ($response) {
+			when (/y/) {
+				mkdir $tftpdir;
+			}
+			when (/n/) {
+				exit;
+			}
+			default {
+				print "$response is not a valid response.\n";
+				exit;
+			}
+	}
     my $where = $ff->fetch( to => $tftpdir );
     print "Fetched netboot into $where.\n";
 

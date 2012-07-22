@@ -3,6 +3,22 @@ psadm
 
 Administration Application to Manage Ubuntu Preseed
 
+Dependancies
+============
+psadm has several dependancies that can easily be fetched using CPAN.  In Linux, to install a module to your system Perl install, issue the following command:
+$ sudo cpan -i <module name>.
+
+psadm is dependant on the modules below:
+
+* autodie
+* Term::Menus;
+* IO::Uncompress::Gunzip
+* IO::Compress::Gzip
+* File::Copy
+* File::Unpack
+* File::Path
+* File::Fetch
+
 License
 =======
 Copyright (c) 2012, Peter Ezetta 

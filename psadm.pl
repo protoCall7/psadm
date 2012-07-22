@@ -8,8 +8,7 @@
 #  DESCRIPTION: Administration tool for Ubuntu Preseed Configuration
 #
 #      OPTIONS: ---
-# REQUIREMENTS: autodie, Term::Menus, IO::Uncompress::Gunzip, File::Copy,
-# 				File::Unpack
+# REQUIREMENTS: autodie, Term::Menus, File::Copy, File::Path, File::Fetch
 #         BUGS: ---
 #        NOTES: ---
 #       AUTHOR: Peter H. Ezetta (PE), peter.ezetta@zonarsystems.com
@@ -71,8 +70,8 @@ sub setNetIface {
 #===  FUNCTION  ================================================================
 #         NAME: fetchNetboot
 #      PURPOSE: Fetches Netboot image from Ubuntu
-#   PARAMETERS: None 
-#      RETURNS: None 
+#   PARAMETERS: None
+#      RETURNS: None
 #  DESCRIPTION: Fetches Ubuntu 12.04 (Precise) netboot images from
 #  				archive.ubuntu.com and unpacks them.
 #       THROWS: no exceptions
@@ -81,35 +80,37 @@ sub setNetIface {
 #===============================================================================
 sub fetchNetboot {
     print "Fetching netboot.tar.gz...\n";
-	my $ff =
+    my $ff =
       File::Fetch->new( uri =>
 'http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/netboot.tar.gz'
       );
 
-	unless (-e $tftpdir) {
-		print "$tftpdir does not exist.  Create it? [y/n]: ";
-		my $response = <STDIN>;
-		chomp $reponse;
-		for ($response) {
-			when (/y/) {
-				mkdir $tftpdir;
-			}
-			when (/n/) {
-				exit;
-			}
-			default {
-				print "$response is not a valid response.\n";
-				exit;
-			}
-	}
+    unless ( -e $tftpdir ) {
+        print "$tftpdir does not exist.  Create it? [y/n]: ";
+        my $response = <STDIN>;
+        chomp $response;
+        for ($response) {
+            when (/y/) {
+                mkdir $tftpdir;
+            }
+            when (/n/) {
+                exit;
+            }
+            default {
+                print "$response is not a valid response.\n";
+                exit;
+            }
+        }
+    }
     my $where = $ff->fetch( to => $tftpdir );
     print "Fetched netboot into $where.\n";
 
-	print "Unpacking tarball...\n";
-	chdir $tftpdir;
-	my $u = File::Unpack->new;
-	$u->unpack('netboot.tar.gz', $tftpdir);
-	print "Netboot Image Installed.  Please Unpack Image, Install preseed.cfg to 
+    print "Unpacking tarball...\n";
+    chdir $tftpdir;
+    my $u = File::Unpack->new;
+    $u->unpack( 'netboot.tar.gz', $tftpdir );
+    print
+      "Netboot Image Installed.  Please Unpack Image, Install preseed.cfg to 
 	  $installdir/image\nand Repack Image.\n";
 }    ## --- end sub fetchNetboot
 

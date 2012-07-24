@@ -32,10 +32,10 @@ require "Initrd.pm";
 my @list       = ( 'Fetch', 'Unpack', 'Interface', 'Repack' );
 my $banner     = "Please select an operation:";
 my $unpackdir  = "./image";
-my $installdir = "/var/tftpboot/netboot/ubuntu-installer/amd64";
+my $installdir = "/var/lib/tftpboot/netboot/ubuntu-installer/amd64";
 my $image      = "initrd.gz";
 my $preseed    = "preseed.cfg";
-my $tftpdir    = "/var/tftpboot";
+my $tftpdir    = "/var/lib/tftpboot";
 my $selection;
 
 #===  FUNCTION  ================================================================

@@ -21,7 +21,7 @@ use File::Unpack;
 use IO::Uncompress::Gunzip qw( gunzip $GunzipError );
 use IO::Compress::Gzip qw( gzip $GzipError );
 
-my $installdir = "/var/tftpboot/netboot/ubuntu-installer/amd64";
+my $installdir = "/var/lib/tftpboot/netboot/ubuntu-installer/amd64";
 my $unpackdir  = "./image";
 my $image      = "initrd.gz";
 my $newc       = "image.cpio";

@@ -26,7 +26,6 @@ use Term::Menus;
 use File::Copy;
 use File::Path;
 use File::Fetch;
-use diagnostics;
 require "Initrd.pm";
 
 my @list       = ( 'Fetch', 'Unpack', 'Interface', 'Repack' );

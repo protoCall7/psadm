@@ -18,6 +18,7 @@ package Initrd;
 use strict;
 use warnings;
 use File::Unpack;
+use File::Path;
 use IO::Uncompress::Gunzip qw( gunzip $GunzipError );
 use IO::Compress::Gzip qw( gzip $GzipError );
 

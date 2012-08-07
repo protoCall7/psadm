@@ -34,7 +34,7 @@ my $unpackdir  = "./image";
 my $installdir = "/var/lib/tftpboot/netboot/ubuntu-installer/amd64";
 my $image      = "initrd.gz";
 my $preseed    = "preseed.cfg";
-my $tftpdir    = "/var/lib/tftpboot";
+my $tftpdir    = "/var/lib/tftpboot/netboot";
 my $selection;
 
 #===  FUNCTION  ================================================================

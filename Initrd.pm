@@ -50,7 +50,9 @@ sub unpack {
     }
 
     print "Uncompressing $image...\n";
-    gunzip $image => $newc;
+    gunzip $image => $newc
+	or die "gunzip failed: $GunzipError\n";
+    print "Unpacking cpio archive $newc...\n";
     $uh->unpack( $newc, $unpackdir );
 
     unlink($newc);
